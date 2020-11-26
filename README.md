@@ -1,4 +1,4 @@
-# V4H Client API
+# V4H - Client API
 
 [![npm version](https://img.shields.io/npm/v/v4h-client-api)](https://www.npmjs.com/package/v4h-client-api)
 [![NPM](https://img.shields.io/npm/l/v4h-client-api)](https://www.npmjs.com/package/v4h-client-api)
