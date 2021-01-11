@@ -1,4 +1,4 @@
-# V4H - Client API
+# Wise API
 
 [![npm version](https://img.shields.io/npm/v/v4h-client-api)](https://www.npmjs.com/package/v4h-client-api)
 [![NPM](https://img.shields.io/npm/l/v4h-client-api)](https://www.npmjs.com/package/v4h-client-api)
@@ -36,13 +36,13 @@ Biblioteca para o serviço de vídeoconferência segura para saúde (V4H - Video
 Usando npm:
 
 ```bash
-$ npm install v4h-client-api
+$ npm install wise-api
 ```
 
 Usando yarn:
 
 ```bash
-$ yarn add v4h-client-api
+$ yarn add wise-api
 ```
 
 Usando jsDelivr CDN:
@@ -56,11 +56,12 @@ Usando jsDelivr CDN:
 A client API deve ser definida da seguinte forma para ser utilizada:
 
 ```javascript
-const v4h = new V4HApi();
+const v4h = new WiseAPI();
 v4h.setup(options);
 ```
 
 Options:
+- baseUrl: [opcional] url do servidor da API
 - login: [opcional] string de identificação para login no sistema
 - password: [opcional] senha para login no sistema
 
@@ -75,13 +76,14 @@ Classe com os métodos das sessões de conferência.
 Método responsável por criar uma sessão
 
 ```javascript
-const v4h = new V4HApi();
+const v4h = new WiseAPI();
 v4h.setup({ login: 'usuario', senha: 'senha' });
 
 const data = {
-  profileId: 1,
-  skinId: 1,
-  orgUnit: 1,
+  profile: 'basico',
+  skin: 'basico',
+  org: 'org',
+  orgUnit: 'orgUnit',
   joinPolicy: 'PUBLIC',
   listPolicy: 'PUBLIC'
 }
@@ -116,7 +118,7 @@ Retorno:
 }
 ```
 
-#### ``getAll()``
+#### ``list()``
 
 Método responsável por recuperar todas as sessões criadas.
 
@@ -124,7 +126,7 @@ Método responsável por recuperar todas as sessões criadas.
 const v4h = new V4HApi();
 v4h.setup({ login: 'usuario', senha: 'senha' });
 
-v4h.session.getAll().then((sessions) => {
+v4h.session.list().then((sessions) => {
   console.log(sessions);
 });
 ```
@@ -145,7 +147,7 @@ Retorno:
 }]
 ```
 
-#### ``get(sessionId)``
+#### ``find(sessionName: string)``
 
 Método responsável por recuperar informações de uma única sessão.
 
@@ -271,7 +273,7 @@ options
 
 #### ``stopConference()``
 
-Método para encerrrar uma conferência, esse método não está disponível se for executado utilizando node e só terá efeito que a conferência já estiver aberta.
+Método para encerrrar uma conferência, esse método não está disponível se for executado utilizando node e só terá efeito quando a conferência já estiver aberta.
 
 ```javascript
 const v4h = new V4HApi();
@@ -503,9 +505,8 @@ data:
 - orgId: Identificador único da organização a qual essa orgUnit pertencerá
 - descr: [opcional] Descrição da unidade organizacional
 - admin: id do usuário administrador da unidade organização
-- logoUrl: Pessoa física ou jurídica
-- reg: Identificador do registro (CNPJ ou CPF)
-- logo: [opcional] URL externa para logo
+- logoUrl: [opcional] URL externa para logo
+- parent: [opcional] Identificador de outra unidade organizacional na qual essa será submissa.
 
 Retorno: 
 
@@ -517,14 +518,14 @@ Retorno:
 
 #### ``getAll()``
 
-Método responsável por recuperar todas as organizações criadas
+Método responsável por recuperar todas as unidades organizações
 
 ```javascript
 const v4h = new V4HApi();
 v4h.setup({ login: 'usuario', senha: 'senha' });
 
-v4h.org.getAll().then((org) => {
-  console.log(org);
+v4h.orgUnit.getAll().then((orgUnits) => {
+  console.log(orgUnits);
 });
 ```
 
@@ -533,29 +534,27 @@ Retorno:
 ```javascript
 [{
   id: 1,
-  shortname: "organização",
-  planId: 1,
-  fullname: "organizacao LTDA",
-  alias: "organizacao de teste",
+  name: "unidade_organização",
+  orgId: 1,
+  descr: "unidade organização de teste",
   admin: 1,
-  type: "J",
-  reg: "12345678912",
-  logo: null
+  parent: null,
+  logoUrl: null
 }]
 ```
 
-#### ``get(orgId)``
+#### ``get(ouId)``
 
-Método responsável por recuperar informações de uma única organiação pela identificador único da organização.
+Método responsável por recuperar informações de uma única unidade organizacional pelo seu identificador único.
 
 ```javascript
 const v4h = new V4HApi();
 v4h.setup({ login: 'usuario', senha: 'senha' });
 
-const orgId = 1;
+const ouId = 1;
 
-v4h.org.get(orgId).then((org) => {
-  console.log(org);
+v4h.orgUnit.get(ouId).then((orgUnit) => {
+  console.log(orgUnit);
 });
 ```
 
@@ -564,45 +563,40 @@ Retorno:
 ```javascript
 {
   id: 1,
-  shortname: "organização",
-  planId: 1,
-  fullname: "organizacao LTDA",
-  alias: "organizacao de teste",
+  name: "unidade_organização",
+  orgId: 1,
+  descr: "unidade organização de teste",
   admin: 1,
-  type: "J",
-  reg: "12345678912",
-  logo: null
+  parent: null,
+  logoUrl: null
 }
 ```
 
-#### ``update(orgId, data)``
+#### ``update(ouId, data)``
 
-Método responsável por atualizar informações de uma organiação pelo identificador único da organização.
+Método responsável por atualizar informações de uma unidade organizacional.
 
 ```javascript
 const v4h = new V4HApi();
 v4h.setup({ login: 'usuario', senha: 'senha' });
 
-const orgId = 1;
+const ouId = 1;
 
 const data = {
-  alias: "organizacao de teste",
+  descr: "organizacao de teste",
 };
 
-v4h.org.update(orgId, data).then((response) => {
+v4h.org.update(ouId, data).then((response) => {
   console.log(response);
 });
 ```
 
 data: 
-- shortname: [opcional] Nome curto – usado para ocasiões com pouco espaço
-- planId: [opcional] O plano ao qual a organização está vinculada
-- fullName: [opcional] Nome completo ou razão social
-- alias: [opcional] Nome de fantasia
-- admin: [opcional] id do usuário administrador da organização
-- type: [opcional] Pessoa física ou jurídica
-- reg: [opcional] Identificador do registro (CNPJ ou CPF)
-- logo: [opcional] URL externa para logo
+- name: [opcional] Nome curto da unidade organizacional
+- descr: [opcional] Descrição da unidade organizacional
+- admin: [opcional] id do usuário administrador da unidade organização
+- logoUrl: [opcional] URL externa para logo
+- parent: [opcional] Identificador de outra unidade organizacional na qual essa será submissa.
 
 Retorno: 
 
@@ -610,17 +604,17 @@ Retorno:
 true or false
 ```
 
-#### ``delete(orgId)``
+#### ``delete(ouId)``
 
-Método responsável por deletar uma organização.
+Método responsável por deletar uma unidade organizacional.
 
 ```javascript
 const v4h = new V4HApi();
 v4h.setup({ login: 'usuario', senha: 'senha' });
 
-const orgId = 1;
+const ouId = 1;
 
-v4h.org.delete(orgId).then((response) => {
+v4h.orgUnit.delete(ouId).then((response) => {
   console.log(response);
 });
 ```
