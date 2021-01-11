@@ -1,9 +1,9 @@
 # Wise API
 
-[![npm version](https://img.shields.io/npm/v/v4h-client-api)](https://www.npmjs.com/package/v4h-client-api)
-[![NPM](https://img.shields.io/npm/l/v4h-client-api)](https://www.npmjs.com/package/v4h-client-api)
-[![npm](https://img.shields.io/npm/dm/v4h-client-api)](https://www.npmjs.com/package/v4h-client-api)
-[![npm bundle size](https://img.shields.io/bundlephobia/min/v4h-client-api)](https://www.npmjs.com/package/v4h-client-api)
+[![npm version](https://img.shields.io/npm/v/wise-api)](https://www.npmjs.com/package/v4h-client-api)
+[![NPM](https://img.shields.io/npm/l/wise-api)](https://www.npmjs.com/package/v4h-client-api)
+[![npm](https://img.shields.io/npm/dm/wise-api)](https://www.npmjs.com/package/v4h-client-api)
+[![npm bundle size](https://img.shields.io/bundlephobia/min/wise-api)](https://www.npmjs.com/package/v4h-client-api)
 
 Biblioteca para o serviço de vídeoconferência segura para saúde (V4H - Video for Health), essa aplicação permite colocar em um sistema web já existente vídeo chamadas além de um controle de acesso complexo, onde você é possível delimitar ações dos usuários dependendo do seu papel. Para mais informações clique [aqui](https://v4h.cloud).
 
