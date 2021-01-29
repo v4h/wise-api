@@ -24,12 +24,12 @@ Biblioteca para o serviço de vídeoconferência segura para saúde (V4H - Video
 - Controle de usuários
 - Funcionalidades dentro da conferências configuráveis
 - Customização de interface configurável
-- Gravação da vídeo conferência do client-side e server-side
+- Gravação da videoconferência client-side e server-side
 - Storage de vídeos gravados
 - Criação de um manifesto de todas as ações ocorridas dentro da conferência
 - Manifesto salvo em blockchain
 - Integração com serviços de blockchain privadas
-- Envio de arquivos referentes a uma videoconferência
+- Armazenamento de arquivos
 
 ## Instalação
 
@@ -48,7 +48,7 @@ $ yarn add wise-api
 Usando jsDelivr CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/v4h/wise-api@0.0.1/wiseapi.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/v4h/wise-api@0.0.1/WiseAPI.min.js"></script>
 ```
 
 ## Client API
@@ -62,21 +62,31 @@ v4h.setup(options);
 
 Options:
 - baseUrl: [opcional] url do servidor da API
+- token: [opcional] token de acesso
+- server: [opcional] servidor de videoconferência
 - login: [opcional] string de identificação para login no sistema
 - password: [opcional] senha para login no sistema
 
 Após o setup você estará disponível para accessar as classes que serão descritas abaixo.
 
-### Session
+### Sessão de videoconferência
 
-Classe com os métodos das sessões de conferência.
+Classe com os métodos de sessões de videoconferência.
 
-#### ``create(data)``
+  - [Requisitar videoconferência](#Requisitar-videoconferência)
+  - [Listar videoconferências](#Listar-videoconferências)
+  - [Recuperar videoconferência](#Recuperar-videoconferência)
+  - [Atualizar videoconferência](#Atualizar-videoconferência)
+  - [Deletar videoconferência](#Deletar-videoconferência)
+  - [Iniciar videoconferência](#Inicar-videoconferência)
+  - [Encerrar videoconferência](#Encerrar-videoconferência)
 
-Método responsável por criar uma sessão
+#### ``Requisitar videoconferência``
+
+Método responsável por criar uma sessão de 
 
 ```javascript
-const v4h = new WiseAPI();
+const wiseAPI = new WiseAPI();
 v4h.setup({ login: 'usuario', senha: 'senha' });
 
 const data = {
@@ -88,15 +98,16 @@ const data = {
   listPolicy: 'PUBLIC'
 }
 
-cosnt session = v4h.session.create(data).then((response) => {
+cosnt session = wiseAPI.session.create(data).then((response) => {
   console.log(response);
 });
 ```
 
 data: 
+- org: Identificador da organização
 - orgUnit: Identificador da unidade organizacional
-- profileId: Identificador do profile
-- skinId: Identificador do skin da conferência
+- profile: Identificador do profile
+- skin: Identificador do skin da conferência
 - joinPolicy: [opcional] Para acessar (entrar), as seguintes políticas podem ser usadas:
   - ORG:  indica que a sessão somente pode acessada por algum usuário da organização
   - ORGUNIT:  somente pode acessada por usuários das unidades organizacionais listadas no atributo allowJoinOu
@@ -118,7 +129,7 @@ Retorno:
 }
 ```
 
-#### ``list()``
+#### ``Listar videoconferências``
 
 Método responsável por recuperar todas as sessões criadas.
 
@@ -135,19 +146,23 @@ Retorno:
 
 ```javascript
 [{
-  id: 1,
-  orgId: 1,
-  ouId: 1,
-  profileId: 1,
-  skinId: 1,
-  finished: null,
+  id: 2,
+  profile: 1,
+  skin: 1,
+  org: 1,
+  orgUnit: 1,
+  status: 'READY',
   firstJoin: null,
   started: null,
-  status: "READY"
+  finished: null,
+  short: 'sks3lf6lhxqt2a1j',
+  joinPolicy: 'PUBLIC',
+  listPolicy: 'PUBLIC',
+  allowJoinOu: null
 }]
 ```
 
-#### ``find(sessionName: string)``
+#### ``Recuperar videoconferência``
 
 Método responsável por recuperar informações de uma única sessão.
 
@@ -157,7 +172,7 @@ v4h.setup({ login: 'usuario', senha: 'senha' });
 
 const sessionId = 1;
 
-v4h.session.get(sessionId).then((session) => {
+v4h.session.find(sessionId).then((session) => {
   console.log(session);
 });
 ```
@@ -166,19 +181,23 @@ Retorno:
 
 ```javascript
 {
-  id: 1,
-  orgId: 1,
-  ouId: 1,
-  profileId: 1,
-  skinId: 1,
-  finished: null,
+  id: 2,
+  profile: 1,
+  skin: 1,
+  org: 1,
+  orgUnit: 1,
+  status: 'READY',
   firstJoin: null,
   started: null,
-  status: "READY"
+  finished: null,
+  short: 'sks3lf6lhxqt2a1j',
+  joinPolicy: 'PUBLIC',
+  listPolicy: 'PUBLIC',
+  allowJoinOu: null
 }
 ```
 
-#### ``update(sessionId, data)``
+#### ``Atualizar videoconferência``
 
 Método responsável por atualizar informações de uma sessão pelo identificador único da sessão.
 
@@ -186,10 +205,10 @@ Método responsável por atualizar informações de uma sessão pelo identificad
 const v4h = new V4HApi();
 v4h.setup({ login: 'usuario', senha: 'senha' });
 
-const sessionId = 1;
+const sessionName = 'skjdhfsjhbfw3fs';
 
 const data = {
-  alias: "organizacao de teste",
+  listPolicy: 'PUBLIC',
 };
 
 v4h.session.update(sessionId, data).then((response) => {
@@ -221,7 +240,7 @@ Retorno:
 true or false
 ```
 
-#### ``delete(sessionId)``
+#### ``Deletar videoconferência``
 
 Método responsável por deletar uma sessão.
 
@@ -242,7 +261,7 @@ Retorno:
 true or false
 ```
 
-#### ``startConference(sessionId, options)``
+#### ``Iniciar videoconferência``
 
 Método para iniciar a conferência em uma div do sistema que está sendo utilizado, esse método não está disponível se for executado utilizando node.
 
@@ -250,7 +269,7 @@ Método para iniciar a conferência em uma div do sistema que está sendo utiliz
 const v4h = new V4HApi();
 v4h.setup({ login: 'usuario', senha: 'senha' });
 
-const sessionId = 1;
+const sessionName = 'skjdhfsjhbfw3fs';
 
 const options = {
   parentNode: document.getElementById('meet'), 
@@ -259,7 +278,7 @@ const options = {
   }
 }
 
-v4h.session.startConference(sessionId, options).then((response) => {
+v4h.session.startConference(sessionName, options).then((response) => {
   console.log(response);
 });
 ```
@@ -268,18 +287,22 @@ options
 - parentNode: div html onde deverá ser colocado o v4h
 - width: [opcional] tamanho em pixels da largura da tela de vídeo conferência
 - height: [opcional] tamanho em pixels da altura tela de vídeo conferência
+- startWithAudioMuted [opcional] booleano para iniciar com audio habilitado ou desabilitado
+- startWithVideoMuted [opcional] booleano para iniciar com video habilitado ou desabilitado
+- shareLink [opcional] link que será inserido no botão de compartilhar
+- buttons [opcional] array de botões que serão exibidos na tela
 - userInfo: [opcional] objeto com informações do usuário
   - displayName: [opcional] nome do usuário que será mostrado na tela
+- onLoad [opcional] callback que será executado na abertura da sessão
+- onClose [opcional] callback que será executado no encerramento da sessão
 
-#### ``stopConference()``
+#### ``Encerrar videoconferência``
 
 Método para encerrrar uma conferência, esse método não está disponível se for executado utilizando node e só terá efeito quando a conferência já estiver aberta.
 
 ```javascript
 const v4h = new V4HApi();
 v4h.setup({ login: 'usuario', senha: 'senha' });
-
-const sessionId = 1;
 
 v4h.session.stopConference().then(() => {
   console.log('ok');
