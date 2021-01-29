@@ -63,7 +63,7 @@ v4h.setup(options);
 Options:
 - baseUrl: [opcional] url do servidor da API
 - token: [opcional] token de acesso
-- server: [opcional] servidor de videoconferência
+- domain: [opcional] servidor de videoconferência
 - login: [opcional] string de identificação para login no sistema
 - password: [opcional] senha para login no sistema
 
