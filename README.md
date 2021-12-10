@@ -48,7 +48,7 @@ $ yarn add wise-api
 Usando jsDelivr CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/v4h/wise-api@0.5.8/wiseapi.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/v4h/wise-api@0.5.9/wiseapi.min.js"></script>
 ```
 
 ## Client API
