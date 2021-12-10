@@ -5,10 +5,10 @@ $(document).ready(() => {
   const v4hapi = new WiseAPI();
 
   v4hapi.setup({
-    baseUrl: 'https://session-manager.homolog.v4h.cloud/api',
-    domain: 'conf.homolog.v4h.cloud',
-    login: 'usuario', // change this
-    senha: 'senha' // change this
+    baseUrl: 'https://session-manager.v4h.cloud/api',
+    domain: 'conf.v4h.cloud',
+    // login: 'usuario', // change this
+    // senha: 'senha' // change this
   }).then(async () => {
 
     const session = await v4hapi.session.create({
